@@ -10,8 +10,8 @@ Two user inputs are taken which is used to encrypt the file into a new file call
 original_file= '/home/jo/Documents/Engineering/HIT137/testing/raw_text-assign.txt'
 encrypted_file='/home/jo/Documents/Engineering/HIT137/testing/encrypted_text.txt'
 
-input_keyn=int(ord(input("Please enter one character for user input n: ")))
-input_keym=int(ord(input("Please enter one character for user input m: ")))
+input_keyn=int(input("Please enter one character for user input n: ")))
+input_keym=int(input("Please enter one character for user input m: ")))
 
 #open file
 def open_file(file_location):
