@@ -26,7 +26,7 @@ m=input("Please enter any input for m: ")
 if n.isalpha or not n.isnumeric:
 	if len(n) == 1:
 		input_keyn = int(ord(n))
-	if len(n) > 1:
+	else:
 		input_keyn = 0
 		for nchar in n:
 			input_keyn = input_keyn + int(ord(nchar))
@@ -36,7 +36,7 @@ else:
 if m.isalpha or not m.isnumeric:
 	if len(m) == 1:
 		input_keym = int(ord(m))
-	if len(m) > 1:
+	else:
 		input_keym = 0
 		for mchar in m:
 			input_keym = input_keym + int(ord(mchar))
