@@ -1,17 +1,47 @@
 #!/bin/python3
 """
-This program was interpreted and has capabilities of:
+This program is a solution to Assignment 2, question 1, for unit HIT137.
+The program hwas interpreted to have the capabilities of:
 -fully decryption method without using the original text.
--it can take any integers or characters as user inputs
-Two user inputs are taken which is used to encrypt the file into a new file called "encrypted_text.txt".
+-taking any or many inputs inputs from user for key m and n
+
+Instructions:
+To use the this program, please do the following steps:
+1. Add in the file path and name of the file that is to be encrypted in the variable "original_file"
+2. Add in the file path and name of the file that is to contain the encrypted message in the variable "encrypted_file"
+
+Developed/Reviewed/Tested by:
+Jo Rivera
 """
 
-
+#Variable that contains the message to be encrypted
 original_file= '/home/jo/Documents/Engineering/HIT137/testing/raw_text-assign.txt'
+
+#Variable that contains the message to be encrypted
 encrypted_file='/home/jo/Documents/Engineering/HIT137/testing/encrypted_text.txt'
 
-input_keyn=int(input("Please enter one character for user input n: ")))
-input_keym=int(input("Please enter one character for user input m: ")))
+n=input("Please enter any input for n: ")
+m=input("Please enter any input for m: ")
+
+if n.isalpha or not n.isnumeric:
+	if len(n) == 1:
+		input_keyn = int(ord(n))
+	if len(n) > 1:
+		input_keyn = 0
+		for nchar in n:
+			input_keyn = input_keyn + int(ord(nchar))
+else:
+	input_keyn = n
+
+if m.isalpha or not m.isnumeric:
+	if len(m) == 1:
+		input_keym = int(ord(m))
+	if len(m) > 1:
+		input_keym = 0
+		for mchar in m:
+			input_keym = input_keym + int(ord(mchar))
+else:
+	input_keym = m
 
 #open file
 def open_file(file_location):
@@ -27,7 +57,7 @@ def open_file(file_location):
 def file2encrypt(efile,ofile,int_keyn,int_keym):
 	raw_encrypt_message=''
 	for char in ofile:
-		# ASCII values: A-Z (65-90), a-z (97-122)
+		#ASCII values: A-Z (65-90), a-z (97-122)
 		#check lower case 
 		char_no=int(ord(char))
 		if 97 <= char_no <= 122:
@@ -85,7 +115,7 @@ def file2encrypt(efile,ofile,int_keyn,int_keym):
 	with open(efile, "w") as wfile:
 		wfile.write(encryptedmessage)
 	
-	return
+	print("Successfully encrypted the original message")
 
 def decryption(contents, int_keyn,int_keym) :
 	raw_decrypt_message=''
@@ -129,7 +159,7 @@ def decryption(contents, int_keyn,int_keym) :
 				raw_decrypt_message += str(encrypt_char)
 
 			else:
-				raw_encrypt_char = char_no - int_keym^2
+				raw_encrypt_char = char_no - (int_keym^2)
 				while raw_encrypt_char <= 77:
 					#calculate overshift
 					raw_encrypt_char -= 77 
@@ -141,7 +171,7 @@ def decryption(contents, int_keyn,int_keym) :
 
 		if not char.isalpha():
 			raw_decrypt_message += str(char)
-
+	print(raw_decrypt_message)
 	return raw_decrypt_message
 
 def decrypt2original(dfile, ofile):
@@ -155,16 +185,13 @@ def decrypt2original(dfile, ofile):
 			counter_check +=1
 		else:
 			return "File not correctly decrypted"
-	return "Decrypted file checked for correctness"
+	print("Decrypted file checked for correctness")
 
-
+#Encryption of original message
 original_contents=str(open_file(original_file))
-encryption=file2encrypt(encrypted_file, original_contents, input_keyn, input_keym)
+file2encrypt(encrypted_file, original_contents, input_keyn, input_keym)
 
+#Decryption of the encrypted message
 encrypted_contents=str(open_file(encrypted_file))
 decrypt_message=decryption(encrypted_contents, input_keyn, input_keym)
-print("The decoded message is", str(decrypt_message))
-
-original_contents=str(open_file(original_file))
-decryption_checked= decrypt2original(decrypt_message, original_contents)
-print(decryption_checked)
+decrypt2original(decrypt_message, original_contents)
