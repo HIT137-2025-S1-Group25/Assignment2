@@ -1,7 +1,7 @@
 #!/bin/python3
 """
 This program is a solution to Assignment 2, question 1, for unit HIT137.
-The program hwas interpreted to have the capabilities of:
+The program was interpreted to have the capabilities of:
 -fully decryption method without using the original text.
 -taking any or many inputs inputs from user for key m and n
 
