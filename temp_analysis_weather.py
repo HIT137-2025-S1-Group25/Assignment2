@@ -1,21 +1,34 @@
-# Question 2 - Weather data analysis 
+"""
+Question 2 - Weather data analysis 
 # This program analyses the temperature data stored in CSV files, 
 # calculate the requested statistics, 
 # and save the results to the specified text files.
 
 
-# NOTE: Place the temperature_data folder in the working directory.
-# NOTE: Install pandas if not already installed using pip install pandas.
-
+# Instructions for this program:
+# - Place the temperature_data folder in the same directory as this python script.
+# - Place empty files named "average_temp.txt", "largest_temp_range_station.txt"
+#    and "warmest_and_coolest_station.txt in the same directory as this python script.
+# - Install pandas if not already installed using pip install pandas.
+"""
 
 import os
 import pandas as pd
 
 # Define paths
-TEMPERATURES_FOLDER = "temperature_data"
-AVERAGE_TEMP_FILE = "average_temp.txt"
-LARGEST_TEMP_RANGE_FILE = "largest_temp_range_station.txt"
-WARMEST_AND_COOLEST_FILE = "warmest_and_coolest_station.txt"
+
+SCRIPT_FILE= __file__
+DIR_FILE = os.path.dirname(os.path.abspath(SCRIPT_FILE))
+
+TEMPERATURES_FOLDERNAME = 'temperature_data'
+AVERAGE_TEMP_FILENAME= "average_temp.txt"
+LARGEST_TEMP_RANGE_FILENAME = "largest_temp_range_station.txt"
+WARMEST_AND_COOLEST_FILENAME = "warmest_and_coolest_station.txt"
+
+TEMPERATURES_FOLDER = DIR_FILE + "/" + TEMPERATURES_FOLDERNAME
+AVERAGE_TEMP_FILE = DIR_FILE + "/" + AVERAGE_TEMP_FILENAME
+LARGEST_TEMP_RANGE_FILE = DIR_FILE + "/" + LARGEST_TEMP_RANGE_FILENAME
+WARMEST_AND_COOLEST_FILE = DIR_FILE + "/" + WARMEST_AND_COOLEST_FILENAME
 
 # Define season mapping
 SEASON_MAP = {
@@ -25,8 +38,17 @@ SEASON_MAP = {
     "Spring": ["September", "October", "November"],
 }
 
+
+def checkfiles():
+    if not os.path.exists(TEMPERATURES_FOLDER) or not os.path.isfile(AVERAGE_TEMP_FILE) or not os.path.isfile(LARGEST_TEMP_RANGE_FILE) or not os.path.isfile(WARMEST_AND_COOLEST_FILE) :
+     # End the function if the file does not exist
+            return False
+
+    return True
+
 def process_temperature_data():
     # Data containers
+
     seasonal_temps = {season: [] for season in SEASON_MAP.keys()}
     station_temps = {}
 
@@ -112,4 +134,9 @@ def process_temperature_data():
     print("Analysis complete. Results written to files.")
 
 # Run the analysis
-process_temperature_data()
+file_checked=checkfiles()
+
+if file_checked == True:
+    process_temperature_data()
+else:
+    print("Files missing.  Please read instructions")
