@@ -7,10 +7,12 @@ This program has limitation in:
 - screen size
 - range of paramters of inputs limitations so that the end result of the drawn tree can fit in the centre of the screen
 
-Developed/Reviewed/Tested by;
-    Darshan Veerabhadrappa Meti - Student S388441
-    Joanna Rivera - Student S392556
-
+# Group Name: HIT137_2025_S1_Group25
+# Group Members:
+# Kushal Mahajan - Student S383488
+# Darshan Veerabhadrappa Meti - Student S388441
+# Joanna Rivera - Student S392556
+# Anmol Singh - Student S385881
 
 """
 
