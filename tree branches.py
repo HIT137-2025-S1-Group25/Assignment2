@@ -36,8 +36,8 @@ def gotomainbranch(turtle_obj, pos, heading):
     turtle_obj.setheading(heading)
     turtle_obj.pendown()
 
+#Draw Recursive Tree
 def grow_tree(turtle_obj, branch_len, left_angle, right_angle, shrink_factor, depth, width, trunk_size):
- 
     if trunk_size != branch_len:
         turtle_obj.color('green')
     else:
