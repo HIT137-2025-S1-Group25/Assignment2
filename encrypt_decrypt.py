@@ -1,143 +1,209 @@
+#!/bin/python3
 """
-Question 2 - Weather data analysis 
-# This program analyses the temperature data stored in CSV files, 
-# calculate the requested statistics, 
-# and save the results to the specified text files.
+This program is a solution to Assignment 2, question 1, for unit HIT137.
+The program was interpreted to have the capabilities of:
+-fully decryption method without using the original text.
+-taking any or many inputs from user for key m and n
 
+Instructions:
+To use this program, please do the following steps:
+1. Add in the file path and name of the file that is to be encrypted in the variable "original_file"
+2. Add in the file path and name of the file that is to contain the encrypted message in the variable "encrypted_file"
 
-# Instructions for this program:
-# - Place the temperature_data folder in the same directory as this python script.
-# - Place empty files named "average_temp.txt", "largest_temp_range_station.txt"
-#    and "warmest_and_coolest_station.txt in the same directory as this python script.
-# - Install pandas if not already installed using pip install pandas.
 """
-
 
 import os
-import pandas as pd
 
-# Define paths
+#Variable that contains the message to be encrypted
+ORIGINAL_FILENAME= 'raw_text.txt'
 
+#Variable that contains the message to be encrypted
+ENCRYPTED_FILENAME='encrypted_text.txt'
+
+#File paths
 SCRIPT_FILE= __file__
 DIR_FILE = os.path.dirname(os.path.abspath(SCRIPT_FILE))
+ORIGINAL_FILE= DIR_FILE + "/" + ORIGINAL_FILENAME
+ENCRYPTED_FILE=DIR_FILE + "/" + ENCRYPTED_FILENAME
 
-TEMPERATURES_FOLDERNAME = 'temperature_data'
-AVERAGE_TEMP_FILENAME= "average_temp.txt"
-LARGEST_TEMP_RANGE_FILENAME = "largest_temp_range_station.txt"
-WARMEST_AND_COOLEST_FILENAME = "warmest_and_coolest_station.txt"
+n=input("Please enter any input for n: ")
+m=input("Please enter any input for m: ")
 
-TEMPERATURES_FOLDER = DIR_FILE + "/" + TEMPERATURES_FOLDERNAME
-AVERAGE_TEMP_FILE = DIR_FILE + "/" + AVERAGE_TEMP_FILENAME
-LARGEST_TEMP_RANGE_FILE = DIR_FILE + "/" + LARGEST_TEMP_RANGE_FILENAME
-WARMEST_AND_COOLEST_FILE = DIR_FILE + "/" + WARMEST_AND_COOLEST_FILENAME
-
-# Define season mapping
-SEASON_MAP = {
-    "Summer": ["December", "January", "February"],
-    "Autumn": ["March", "April", "May"],
-    "Winter": ["June", "July", "August"],
-    "Spring": ["September", "October", "November"],
-}
-
-
-def checkfiles():
-    if not os.path.exists(TEMPERATURES_FOLDER) or not os.path.isfile(AVERAGE_TEMP_FILE) or not os.path.isfile(LARGEST_TEMP_RANGE_FILE) or not os.path.isfile(WARMEST_AND_COOLEST_FILE) :
-     # End the function if the file does not exist
-            return False
-
-    return True
-
-def process_temperature_data():
-    # Data containers
-
-    seasonal_temps = {season: [] for season in SEASON_MAP.keys()}
-    station_temps = {}
-
-    # Process all CSV files in the folder
-    for file_name in os.listdir(TEMPERATURES_FOLDER):
-        if file_name.endswith(".csv"):
-            file_path = os.path.join(TEMPERATURES_FOLDER, file_name)
-            data = pd.read_csv(file_path)
-
-            # Ensure necessary columns exist
-            if not {"STATION_NAME", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"}.issubset(data.columns):
-                continue
-
-            # Iterate through the rows
-            for _, row in data.iterrows():
-                station = row["STATION_NAME"]
-
-                # Aggregate temperatures by season
-                for season, months in SEASON_MAP.items():
-                    temps = [row[month] for month in months if pd.notnull(row[month])]
-                    seasonal_temps[season].extend(temps)
-
-                # Collect all temperatures for each station
-                if station not in station_temps:
-                    station_temps[station] = []
-                station_temps[station].extend(
-                    [row[month] for month in data.columns[4:] if pd.notnull(row[month])]
-                )
-
-    # Task 1: Calculate average temperatures for each season
-    average_seasonal_temps = {
-        season: (sum(temps) / len(temps)) if temps else 0.0
-        for season, temps in seasonal_temps.items()
-    }
-    with open(AVERAGE_TEMP_FILE, "w") as file:
-        file.write("Average Temperatures by Season:\n")
-        for season, avg_temp in average_seasonal_temps.items():
-            file.write(f"{season}: {avg_temp:.2f}°C\n")
-
-    # Task 2: Find station(s) with the largest temperature range
-    temp_ranges = {
-        station: max(temps) - min(temps) if temps else 0.0
-        for station, temps in station_temps.items()
-    }
-    max_range = max(temp_ranges.values())
-    largest_range_stations = [
-        station for station, range_ in temp_ranges.items() if range_ == max_range
-    ]
-    with open(LARGEST_TEMP_RANGE_FILE, "w") as file:
-        file.write("Station(s) with Largest Temperature Range:\n")
-        for station in largest_range_stations:
-            file.write(f"{station}: {max_range:.2f}°C\n")
-
-    # Task 3: Find warmest and coolest stations (using actual temperature extremes)
-    warmest_stations = []
-    coolest_stations = []
-    max_temp = float('-inf')
-    min_temp = float('inf')
-
-    for station, temps in station_temps.items():
-        if temps:
-            station_max = max(temps)
-            station_min = min(temps)
-            if station_max > max_temp:
-                max_temp = station_max
-                warmest_stations = [station]
-            elif station_max == max_temp:
-                warmest_stations.append(station)
-            if station_min < min_temp:
-                min_temp = station_min
-                coolest_stations = [station]
-            elif station_min == min_temp:
-                coolest_stations.append(station)
-
-    with open(WARMEST_AND_COOLEST_FILE, "w") as file:
-        file.write("Warmest Station(s):\n")
-        for station in warmest_stations:
-            file.write(f"{station}: {max_temp:.2f}°C\n")
-        file.write("\nCoolest Station(s):\n")
-        for station in coolest_stations:
-            file.write(f"{station}: {min_temp:.2f}°C\n")
-
-    print("Analysis complete. Results written to files.")
-
-# Run the analysis
-file_checked=checkfiles()
-
-if file_checked == True:
-    process_temperature_data()
+if n.isalpha or not n.isnumeric:
+	if len(n) == 1:
+		input_keyn = int(ord(n))
+	else:
+		input_keyn = 0
+		for nchar in n:
+			input_keyn = input_keyn + int(ord(nchar))
 else:
-    print("Files missing.  Please read instructions")
+	input_keyn = n
+
+if m.isalpha or not m.isnumeric:
+	if len(m) == 1:
+		input_keym = int(ord(m))
+	else:
+		input_keym = 0
+		for mchar in m:
+			input_keym = input_keym + int(ord(mchar))
+else:
+	input_keym = m
+
+#open file
+def open_file(file_location):
+	if not os.path.isfile(file_location):
+		print("Files not found.  Please read instructions")
+		return False
+	else:
+		with open(file_location, 'r') as file:
+			content = file.readlines()
+			return content, True
+	
+#checkpoints of encryption
+def file2encrypt(efile,ofile,int_keyn,int_keym):
+	raw_encrypt_message=''
+	for char in ofile:
+		#ASCII values: A-Z (65-90), a-z (97-122)
+		#check lower case 
+		char_no=int(ord(char))
+		if 97 <= char_no <= 122:
+			if 97 <= char_no <= 109:
+				# check first half (97-112 ) and encrypt char by +n*m
+				raw_encrypt_char=char_no + (int_keyn * int_keym)
+				
+				while raw_encrypt_char > 109:
+					raw_encrypt_char -= 109 +1
+					raw_encrypt_char += 97
+			
+				encrypt_char = chr(raw_encrypt_char)
+				raw_encrypt_message += str(encrypt_char)
+
+			else:
+				#check second half and encrypt char by -n*m
+				raw_encrypt_char=char_no - (int_keyn * int_keym)
+				while 110 > raw_encrypt_char:
+				
+					#calculate overshift
+					raw_encrypt_char += 122
+					raw_encrypt_char -= 110 -1
+			
+				encrypt_char = chr(raw_encrypt_char)
+				raw_encrypt_message += str(encrypt_char)
+
+		if 65 <= char_no <= 90:
+			if 65 <= char_no <= 77:
+				raw_encrypt_char = char_no - int_keyn
+				
+				while raw_encrypt_char < 65:
+					#calculate overshift
+					raw_encrypt_char += 77 
+					raw_encrypt_char -= 65 -1
+
+				encrypt_char = chr(raw_encrypt_char)
+				raw_encrypt_message += str(encrypt_char)
+
+			else:
+				raw_encrypt_char = char_no + (int_keym^2)
+				while 90 < raw_encrypt_char :
+					#calculate overshift
+					raw_encrypt_char += 77 
+					raw_encrypt_char -= 90
+					
+				encrypt_char = chr(raw_encrypt_char)
+
+				raw_encrypt_message += str(encrypt_char)
+
+		if not char.isalpha():
+			raw_encrypt_message += str(char)
+		encryptedmessage = raw_encrypt_message[2:-2]
+
+	if os.path.isfile(efile):
+	#Write encryption to file
+		with open(efile, "w") as wfile:
+			wfile.write(encryptedmessage)
+		print("Successfully encrypted the original message")
+		return True
+	else:
+		print("Missing file to write encryption")
+		return False
+
+def decryption(contents, int_keyn,int_keym) :
+	raw_decrypt_message=''
+	string_contents=str(contents)
+	for char in string_contents:
+		char_no=ord(char)
+		if 97 <= char_no <= 122:
+			if 97 <= char_no <= 109:
+				raw_encrypt_char=char_no - (int_keyn * int_keym)
+				
+				while raw_encrypt_char < 97:
+					raw_encrypt_char += 109
+					raw_encrypt_char -= 97 -1
+			
+				encrypt_char = chr(raw_encrypt_char)
+				raw_decrypt_message += str(chr(raw_encrypt_char))
+
+			else:
+				#check second half and encrypt char by -n*m
+				raw_encrypt_char=char_no + (int_keyn * int_keym)
+
+				while 123 <= raw_encrypt_char:
+					#calculate overshift
+					raw_encrypt_char -= 122
+					raw_encrypt_char += 110 -1
+			
+				encrypt_char = chr(raw_encrypt_char)
+
+				raw_decrypt_message += str(encrypt_char)
+
+		if 65 <= char_no <= 90:
+			if 65 <= char_no <= 77:
+				raw_encrypt_char = char_no + int_keyn
+				
+				while raw_encrypt_char > 77:
+					#calculate overshift
+					raw_encrypt_char -= 77 
+					raw_encrypt_char += 65
+				encrypt_char = chr(raw_encrypt_char)
+
+				raw_decrypt_message += str(encrypt_char)
+
+			else:
+				raw_encrypt_char = char_no - (int_keym^2)
+				while raw_encrypt_char <= 77:
+					#calculate overshift
+					raw_encrypt_char -= 77 
+					raw_encrypt_char += 90
+					
+				encrypt_char = chr(raw_encrypt_char)
+
+				raw_decrypt_message += str(encrypt_char)
+
+		if not char.isalpha():
+			raw_decrypt_message += str(char)
+	print(raw_decrypt_message)
+	return raw_decrypt_message
+
+def decrypt2original(dfile, ofile):
+	index_decryptedcontents_counter=0
+	for i in dfile:
+		index_decryptedcontents_counter += 1
+
+	counter_check=0
+	for i in range(index_decryptedcontents_counter):
+		if dfile[counter_check] == ofile[counter_check]:
+			counter_check +=1
+		else:
+			return "File not correctly decrypted"
+	print("Decrypted file checked for correctness")
+
+#Encryption of original message
+original_contents=str(open_file(ORIGINAL_FILE))
+file2encrypt(ENCRYPTED_FILE, original_contents, input_keyn, input_keym)
+
+#Decryption of the encrypted message
+encrypted_contents=str(open_file(ENCRYPTED_FILE))
+decrypt_message=decryption(encrypted_contents, input_keyn, input_keym)
+print(decrypt_message)
+decrypt2original(decrypt_message, ORIGINAL_FILE)
+
