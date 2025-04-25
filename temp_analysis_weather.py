@@ -10,7 +10,16 @@ Question 2 - Weather data analysis
 # - Place empty files named "average_temp.txt", "largest_temp_range_station.txt"
 #    and "warmest_and_coolest_station.txt in the same directory as this python script.
 # - Install pandas if not already installed using pip install pandas.
+
+# Group Name: HIT137_2025_S1_Group25
+# Group Members:
+# Kushal Mahajan - Student S383488
+# Darshan Veerabhadrappa Meti - Student S388441
+# Joanna Rivera - Student S392556
+# Anmol Singh - Student S385881
+
 """
+
 
 import os
 import pandas as pd
@@ -43,7 +52,6 @@ def checkfiles():
     if not os.path.exists(TEMPERATURES_FOLDER) or not os.path.isfile(AVERAGE_TEMP_FILE) or not os.path.isfile(LARGEST_TEMP_RANGE_FILE) or not os.path.isfile(WARMEST_AND_COOLEST_FILE) :
      # End the function if the file does not exist
             return False
-
     return True
 
 def process_temperature_data():
